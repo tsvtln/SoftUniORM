@@ -48,3 +48,27 @@ class Product(m.Model):
     created_at = m.DateTimeField(
         auto_now_add=True
     )
+
+
+class UserProfile(m.Model):
+    username = m.CharField(
+        max_length=65,
+        unique=True
+    )
+    first_name = m.CharField(
+        max_length=40
+    )
+    last_name = m.CharField(
+        max_length=40
+    )
+    email = m.EmailField(
+        unique=True,
+        default='students@softuni.bg'
+    )
+    bio = m.TextField(
+        max_length=120
+    )
+    profile_image_url = m.URLField()
+    created_at = m.DateTimeField(
+        auto_now_add=True
+    )
