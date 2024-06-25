@@ -7,3 +7,11 @@ class Person(m.Model):
     )
 
     age = m.PositiveIntegerField()
+
+
+class Blog(m.Model):
+    post = m.TextField()
+    author = m.CharField(
+        max_length=35
+    )
+    
