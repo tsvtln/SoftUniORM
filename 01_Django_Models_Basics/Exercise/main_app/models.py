@@ -14,4 +14,4 @@ class Blog(m.Model):
     author = m.CharField(
         max_length=35
     )
-    
+
