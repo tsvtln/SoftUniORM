@@ -96,3 +96,37 @@ class Exercise(m.Model):
     is_favorite = m.BooleanField(
         default=False,
     )
+
+
+class Book(m.Model):
+    class Genres(m.TextChoices):
+        FICTION = 'Fiction', 'Fiction'
+        NON_FICTION = 'Non-Fiction', 'Non-Fiction'
+        SCIENCE_FICTION = 'Science Fiction', 'Science Fiction'
+        HORROR = 'Horror', 'Horror'
+    title = m.CharField(
+        max_length=30,
+    )
+    author = m.CharField(
+        max_length=100,
+    )
+    genre = m.CharField(
+        max_length=20,
+        choices=Genres
+    )
+    publication_date = m.DateField(
+        editable=False,
+        auto_now_add=True,
+    )
+    price = m.DecimalField(
+        max_digits=8,
+        decimal_places=2,
+    )
+    is_available = m.BooleanField(
+        default=True,
+    )
+    rating = m.FloatField()
+    description = m.TextField()
+
+    def __str__(self):
+        return self.title
