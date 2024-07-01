@@ -5,15 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="75d5e7ef-6a07-45b9-b79a-4417612fcd32" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/4a359540-b325-4164-bde5-d995e17c63db.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/4a359540-b325-4164-bde5-d995e17c63db/storage_v2/_src_/database/migration_admin_lab.bNntSQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/4a359540-b325-4164-bde5-d995e17c63db/storage_v2/_src_/database/migration_admin_lab.bNntSQ/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/4a359540-b325-4164-bde5-d995e17c63db/storage_v2/_src_/database/migration_admin_lab.bNntSQ/schema/information_schema.FNRwLQ.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/4a359540-b325-4164-bde5-d995e17c63db/storage_v2/_src_/database/migration_admin_lab.bNntSQ/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/4a359540-b325-4164-bde5-d995e17c63db/storage_v2/_src_/database/migration_admin_lab.bNntSQ/schema/pg_catalog.0S1ZNQ.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/4a359540-b325-4164-bde5-d995e17c63db/storage_v2/_src_/database/migration_admin_lab.bNntSQ/schema/public.abK9xQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/4a359540-b325-4164-bde5-d995e17c63db/storage_v2/_src_/database/postgres.edMnLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/4a359540-b325-4164-bde5-d995e17c63db/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_app/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_app/admin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main_app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_app/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -101,7 +94,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1719824953032</updated>
-      <workItem from="1719824954156" duration="4075000" />
+      <workItem from="1719824954156" duration="5791000" />
     </task>
     <servers />
   </component>

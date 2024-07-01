@@ -11,3 +11,6 @@ class Product(models.Model):
     last_edited_on = models.DateTimeField(auto_now=True)
     # count = models.PositiveIntegerField(default=0)
     barcode = models.IntegerField()
+
+    def __str__(self):
+        return self.name
