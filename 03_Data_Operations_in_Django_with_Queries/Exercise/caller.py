@@ -2,12 +2,14 @@ import os
 import django
 from django.db.models import QuerySet
 
+# from dummy_data import populate_model_with_data
+
 # Set up Django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "orm_skeleton.settings")
 django.setup()
 
 from django.core.management import call_command
-from main_app.models import Pet, Artifact, Location, Car
+from main_app.models import Pet, Artifact, Location, Car, Task
 
 call_command('makemigrations')
 call_command('migrate')
@@ -84,6 +86,29 @@ def delete_last_car() -> None:
     Car.objects.last().delete()
 
 
+def show_unfinished_tasks() -> str:
+    tasks = Task.objects.filter(is_finished=False)
+    return '\n'.join(str(task) for task in tasks)
+
+
+def complete_odd_tasks() -> None:
+    all_tasks = Task.objects.all()
+    for task in all_tasks:
+        if task.id % 2 != 0:
+            task.is_finished = True
+            task.save()
+
+
+def encode_and_replace(text: str, task_title: str):
+    encoded_text = ''.join(chr(ord(letter) - 3) for letter in text)
+    all_tasks = Task.objects.all()
+    for task in all_tasks:
+        if task.title == task_title:
+            task.description = encoded_text
+            task.save()
+
+
+
 # Test prints
 
 # print(create_pet('Buddy', 'Dog'))
@@ -101,3 +126,9 @@ def delete_last_car() -> None:
 
 # print(apply_discount())
 # print(get_recent_cars())
+
+
+# populate_model_with_data(Task)
+# print(show_unfinished_tasks())
+# print(complete_odd_tasks())
+# print(encode_and_replace('Zdvk#wkh#glvkhv$', 'Task 3'))
