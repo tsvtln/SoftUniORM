@@ -2,17 +2,16 @@ import os
 import django
 from django.db.models import QuerySet
 
-# from dummy_data import populate_model_with_data
-
 # Set up Django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "orm_skeleton.settings")
 django.setup()
 
-from django.core.management import call_command
-from main_app.models import Pet, Artifact, Location, Car, Task
+# from django.core.management import call_command
+from main_app.models import Pet, Artifact, Location, Car, Task, HotelRoom
 
-call_command('makemigrations')
-call_command('migrate')
+
+# call_command('makemigrations')
+# call_command('migrate')
 
 def create_pet(name: str, species: str):
     Pet.objects.create(
@@ -108,6 +107,42 @@ def encode_and_replace(text: str, task_title: str):
             task.save()
 
 
+def get_deluxe_rooms() -> str:
+    rooms_printer = []
+    all_rooms = HotelRoom.objects.all()
+    for room in all_rooms:
+        if room.id % 2 == 0:
+            rooms_printer.append(str(room))
+    return '\n'.join(rooms_printer)
+
+
+def increase_room_capacity() -> None:
+    all_rooms = HotelRoom.objects.all().order_by('id')
+    previous_room_capacity = None
+
+    for room in all_rooms:
+        if not room.is_reserved:
+            continue
+        if previous_room_capacity is not None:
+            room.capacity += previous_room_capacity
+        else:
+            room.capacity += room.id
+
+        previous_room_capacity = room.capacity
+        # room.save()
+    HotelRoom.objects.bulk_update(all_rooms, ['capacity'])
+
+
+def reserve_first_room() -> None:
+    room = HotelRoom.objects.first()
+    room.is_reserved = True
+    room.save()
+
+
+def delete_last_room() -> None:
+    room = HotelRoom.objects.last()
+    if not room.is_reserved:
+        room.delete()
 
 # Test prints
 
@@ -132,3 +167,7 @@ def encode_and_replace(text: str, task_title: str):
 # print(show_unfinished_tasks())
 # print(complete_odd_tasks())
 # print(encode_and_replace('Zdvk#wkh#glvkhv$', 'Task 3'))
+
+# from dummy_data import populate_model_with_data
+# populate_model_with_data(HotelRoom)
+# print(get_deluxe_rooms())

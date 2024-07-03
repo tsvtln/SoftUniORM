@@ -72,3 +72,28 @@ class Task(models.Model):
 
     def __str__(self):
         return f"Task - {self.title} needs to be done until {self.due_date}!"
+
+
+class HotelRoom(models.Model):
+    class RoomTypes:
+        STANDARD = 'Standard', 'Standard'
+        DELUXE = 'Deluxe', 'Deluxe'
+        SUITE = 'Suite', 'Suite'
+
+    room_number = models.PositiveIntegerField()
+    room_type = models.CharField(
+        max_length=10,
+        choices=RoomTypes
+    )
+    capacity = models.PositiveIntegerField()
+    amenities = models.TextField()
+    price_per_night = models.DecimalField(
+        max_digits=8,
+        decimal_places=2
+    )
+    is_reserved = models.BooleanField(
+        default=False,
+    )
+
+    def __str__(self):
+        return f"Deluxe room with number {self.room_number} costs {self.price_per_night} per night!"
