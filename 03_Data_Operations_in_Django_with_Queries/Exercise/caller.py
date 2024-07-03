@@ -45,6 +45,27 @@ def show_all_locations() -> str:
     all_locations = Location.objects.all().order_by('-id')
     return '\n'.join(str(loc) for loc in all_locations)
 
+
+def new_capital() -> None:
+    first_location = Location.objects.first()
+    first_location.is_capital = True
+    first_location.save()
+
+
+def get_capitals():
+    # capitals = []
+    # all_locations = Location.objects.all()
+    # for loc in all_locations:
+    #     if loc.is_capital:
+    #         capitals.append(loc)
+    # return capitals
+    return Location.objects.filter(is_capital=True).values('name')
+
+
+def delete_first_location():
+    Location.objects.first().delete()
+
+
 # Test prints
 
 # print(create_pet('Buddy', 'Dog'))
@@ -55,3 +76,7 @@ def show_all_locations() -> str:
 # artifact_object = Artifact.objects.get(name='Ancient Sword')
 # rename_artifact(artifact_object, 'Ancient Shield')
 # print(artifact_object.name)
+
+# print(show_all_locations())
+# print(new_capital())
+# print(get_capitals())
