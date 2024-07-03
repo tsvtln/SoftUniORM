@@ -1,12 +1,13 @@
 import os
 import django
+from django.db.models import QuerySet
 
 # Set up Django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "orm_skeleton.settings")
 django.setup()
 
 from django.core.management import call_command
-from main_app.models import Pet, Artifact, Location
+from main_app.models import Pet, Artifact, Location, Car
 
 call_command('makemigrations')
 call_command('migrate')
@@ -66,6 +67,23 @@ def delete_first_location():
     Location.objects.first().delete()
 
 
+def apply_discount() -> None:
+    all_cars = Car.objects.all()
+    for car in all_cars:
+        discount_percent = sum(int(digit) for digit in str(car.year)) / 100
+        discount_price = float(car.price) * discount_percent
+        car.price_with_discount = float(car.price) - discount_price
+        car.save()
+
+
+def get_recent_cars() -> QuerySet:
+    return Car.objects.filter(year__gt=2020).values('model', 'price_with_discount')
+
+
+def delete_last_car() -> None:
+    Car.objects.last().delete()
+
+
 # Test prints
 
 # print(create_pet('Buddy', 'Dog'))
@@ -80,3 +98,6 @@ def delete_first_location():
 # print(show_all_locations())
 # print(new_capital())
 # print(get_capitals())
+
+# print(apply_discount())
+# print(get_recent_cars())
