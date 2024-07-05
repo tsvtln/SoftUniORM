@@ -157,3 +157,21 @@ def filter_authors_by_birth_year(year_one, year_two):
 # print()
 # print("Authors born between 2000 and 2010:")
 # print(filter_authors_by_birth_year(2000, 2010))
+
+
+def change_reviewer_name(rn, new_name):
+    all_reviewers = Review.objects.all()
+    for reviewer in all_reviewers:
+        if reviewer.reviewer_name == rn:
+            reviewer.reviewer_name = new_name
+            reviewer.save()
+    return all_reviewers
+
+# print("Change Alice Johnson to A.J.:")
+# print(change_reviewer_name("Alice Johnson", "A.J."))
+# print()
+# print("Change Bob Wilson to Bobby W.:")
+# print(change_reviewer_name("Bob Wilson", "Bobby W."))
+# print()
+# print("Change A.J. to A. Johnson:")
+# print(change_reviewer_name("A.J.", "A. Johnson"))
