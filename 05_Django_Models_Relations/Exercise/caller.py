@@ -1,4 +1,6 @@
 import os
+from datetime import date, timedelta
+
 import django
 
 # Set up Django
@@ -6,11 +8,11 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "orm_skeleton.settings")
 django.setup()
 
 # Import your models here
-from main_app.models import Author, Book, Artist, Song, Product, Review
+from main_app.models import Author, Book, Artist, Song, Product, Review, Driver, DrivingLicense
 
 
 # from dummy_data import populate_model_with_data
-# populate_model_with_data(Review)
+# populate_model_with_data(DrivingLicense, 20)
 
 
 # Create queries within functions
@@ -94,3 +96,23 @@ def get_products_with_no_reviews():
 
 def delete_products_without_reviews():
     Product.objects.filter(reviews__isnull=True).delete()
+
+
+### LICENSE ###
+def calculate_licenses_expiration_dates():
+    return '\n'.join(
+        [f"License with number: {lic.license_number} expires on {lic.issue_date + timedelta(days=365)}!" for lic in
+         DrivingLicense.objects.all().order_by('-license_number')])
+
+
+# print(calculate_licenses_expiration_dates())
+
+
+def get_drivers_with_expired_licenses(due_date: date):
+    expiration_date = due_date - timedelta(days=365)
+    expired_licenses = Driver.objects.filter(
+        license__issue_date__gt=expiration_date
+    )
+    return expired_licenses
+
+# print(get_drivers_with_expired_licenses(date(2023, 1, 1)))
