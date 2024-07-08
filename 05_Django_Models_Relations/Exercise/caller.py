@@ -6,11 +6,11 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "orm_skeleton.settings")
 django.setup()
 
 # Import your models here
-from main_app.models import Author, Book, Artist, Song
+from main_app.models import Author, Book, Artist, Song, Product, Review
 
 
 # from dummy_data import populate_model_with_data
-# populate_model_with_data(Song, 10)
+# populate_model_with_data(Review)
 
 
 # Create queries within functions
@@ -65,3 +65,32 @@ def remove_song_from_artist(artist_name: str, song_title: str):
 
 
 # remove_song_from_artist('Artist 1', 'Song 5')
+
+
+### SHOP ###
+def calculate_average_rating_for_product_by_name(product_name: str):
+    product_object = Product.objects.get(name=product_name)
+    reviews_for_product = product_object.reviews.all()
+    total_rating = sum(r.rating for r in reviews_for_product)
+    avg_rating = total_rating / len(reviews_for_product)
+
+    return avg_rating
+
+
+# print(calculate_average_rating_for_product_by_name('Product 9'))
+
+
+def get_reviews_with_high_ratings(threshold: int):
+    return Review.objects.filter(rating__gte=threshold)
+
+
+# print(get_reviews_with_high_ratings(50))
+
+def get_products_with_no_reviews():
+    return Product.objects.filter(reviews__isnull=True).order_by('-name')
+
+
+# print(get_products_with_no_reviews())
+
+def delete_products_without_reviews():
+    Product.objects.filter(reviews__isnull=True).delete()
