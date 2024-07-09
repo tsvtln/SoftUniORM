@@ -1,3 +1,6 @@
+from datetime import date
+
+from django.core.exceptions import ValidationError
 from django.db import models
 
 
@@ -13,6 +16,11 @@ class Animal(models.Model):
     sound = models.CharField(
         max_length=100,
     )
+
+    @property
+    def age(self):
+        age = date.today() - self.birth_date
+        return age.days // 365
 
 
 class Mammal(Animal):
@@ -65,6 +73,10 @@ class ZooKeeper(Employee):
         to='Animal',
     )
 
+    def clean(self):
+        if self.specialty not in self.Specialization:
+            raise ValidationError('Specialty must be a valid choice.')
+
 
 class Veterinarian(Employee):
     license_number = models.CharField(
@@ -76,3 +88,17 @@ class ZooDisplayAnimal(Animal):
     class Meta:
         proxy = True
 
+    def display_info(self):
+        return (f"Meet {self.name}! Species: {self.species}, born {self.birth_date}. "
+                f"It makes a noise like '{self.sound}'.")
+
+    def is_endangered(self):
+        animals_danger = [
+            'Cross River Gorilla',
+            'Orangutan',
+            'Green Turtle'
+        ]
+        if self.species in animals_danger:
+            return f"{self.species} is at risk!"
+        else:
+            return f"{self.species} is not at risk."
