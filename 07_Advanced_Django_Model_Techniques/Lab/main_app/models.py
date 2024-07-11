@@ -4,12 +4,15 @@ from django.db import models
 
 
 # Custom Validations
-# class NameValidator(models.CharField):
-#     def to_python(self, value):
-#         if len(value) < 2:
-#             raise ValidationError('Name must be at least 2 characters long.')
-#         elif len(value) > 100:
-#             raise ValidationError('Name cannot exceed 100 characters.')
+
+def validate_menu_categories(value):
+    # if value not in ("Appetizers", "Main Course", "Desserts"):
+    #     raise ValidationError('The menu must include each of the categories "Appetizers", "Main Course", "Desserts".')
+    required_categories = ["Appetizers", "Main Course", "Desserts"]
+    missing_categories = [category for category in required_categories if category not in value]
+
+    if missing_categories:
+        raise ValidationError('The menu must include each of the categories "Appetizers", "Main Course", "Desserts".')
 
 
 # Create your models here.
@@ -43,3 +46,43 @@ class Restaurant(models.Model):
             MaxValueValidator(5.00, message='Rating cannot exceed 5.00.')
         ]
     )
+
+
+class Menu(models.Model):
+    name = models.CharField(
+        max_length=100,
+    )
+
+    description = models.TextField(
+        validators=[validate_menu_categories]
+    )
+
+    restaurant = models.ForeignKey(
+        to='Restaurant',
+        on_delete=models.CASCADE
+    )
+
+
+class RestaurantReview(models.Model):
+    reviewer_name = models.CharField(
+        max_length=100,
+    )
+
+    restaurant = models.ForeignKey(
+        to='Restaurant',
+        on_delete=models.CASCADE
+    )
+
+    review_content = models.TextField()
+
+    rating = models.PositiveIntegerField(
+        validators=[
+            MaxValueValidator(5)
+        ]
+    )
+
+    class Meta:
+        ordering = ['-rating']
+        verbose_name = 'Restaurant Review'
+        verbose_name_plural = 'Restaurant Reviews'
+        unique_together = ['reviewer_name', 'restaurant']
