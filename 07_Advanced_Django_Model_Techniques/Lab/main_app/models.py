@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, MaxLengthValidator, MinValueValidator, MaxValueValidator
 from django.db import models
+from django.db.models import Index
 
 
 # Custom Validations
@@ -104,3 +105,30 @@ class FoodCriticRestaurantReview(RestaurantReview):
         verbose_name_plural = 'Food Critic Reviews'
         unique_together = ['reviewer_name', 'restaurant']
 
+
+class MenuReview(models.Model):
+    reviewer_name = models.CharField(
+        max_length=100,
+    )
+
+    menu = models.ForeignKey(
+        to='Menu',
+        on_delete=models.CASCADE,
+    )
+
+    review_content = models.TextField()
+
+    rating = models.PositiveIntegerField(
+        validators=[
+            MaxValueValidator(5)
+        ]
+    )
+
+    class Meta:
+        ordering = ['-rating']
+        verbose_name = 'Menu Review'
+        verbose_name_plural = 'Menu Reviews'
+        unique_together = ('reviewer_name', 'menu')
+        indexes = [
+            Index(fields=['menu',], name='main_app_menu_review_menu_id')
+        ]
