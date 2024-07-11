@@ -19,6 +19,21 @@ class StudentIDField(models.PositiveIntegerField):
         return cleaned_value
 
 
+class MaskedCreditCardField(models.CharField):
+    def __init__(self, *args, **kwargs):
+        kwargs['max_length'] = 20
+        super().__init__(*args, **kwargs)
+
+    def to_python(self, value):
+        if not isinstance(value, str):
+            raise ValidationError('The card number must be a string')
+        if not value.isdigit():
+            raise ValidationError('The card number must contain only digits')
+        if not len(value) == 16:
+            raise ValidationError('The card number must be exactly 16 characters long')
+
+        return f"****-****-****-{value[-4:]}"
+
 # Create your models here.
 class BaseCharacter(models.Model):
     name = models.CharField(
@@ -165,3 +180,10 @@ class Student(models.Model):
         max_length=100,
     )
     student_id = StudentIDField()
+
+
+class CreditCard(models.Model):
+    card_owner = models.CharField(
+        max_length=100,
+    )
+    card_number = MaskedCreditCardField()
