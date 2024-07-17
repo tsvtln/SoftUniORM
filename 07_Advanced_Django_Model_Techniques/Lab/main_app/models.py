@@ -15,6 +15,19 @@ def validate_menu_categories(value):
     if missing_categories:
         raise ValidationError('The menu must include each of the categories "Appetizers", "Main Course", "Desserts".')
 
+# Mixins
+
+class ReviewMixin(models.Model):
+    review_content = models.TextField()
+    rating = models.PositiveIntegerField(
+        validators=[
+            MaxValueValidator(5)
+        ]
+    )
+    class Meta:
+        abstract=True
+        ordering = ['-rating']
+
 
 # Create your models here.
 class Restaurant(models.Model):
@@ -64,7 +77,7 @@ class Menu(models.Model):
     )
 
 
-class RestaurantReview(models.Model):
+class RestaurantReview(ReviewMixin):
     reviewer_name = models.CharField(
         max_length=100,
     )
@@ -74,17 +87,16 @@ class RestaurantReview(models.Model):
         on_delete=models.CASCADE
     )
 
-    review_content = models.TextField()
+    # review_content = models.TextField()
+    #
+    # rating = models.PositiveIntegerField(
+    #     validators=[
+    #         MaxValueValidator(5)
+    #     ]
+    # )
 
-    rating = models.PositiveIntegerField(
-        validators=[
-            MaxValueValidator(5)
-        ]
-    )
-
-    class Meta:
+    class Meta(ReviewMixin.Meta):
         abstract = True
-        ordering = ['-rating']
         verbose_name = 'Restaurant Review'
         verbose_name_plural = 'Restaurant Reviews'
         unique_together = ['reviewer_name', 'restaurant']
@@ -99,14 +111,13 @@ class FoodCriticRestaurantReview(RestaurantReview):
         max_length=100,
     )
 
-    class Meta:
-        ordering = ['-rating']
+    class Meta(RestaurantReview.Meta):
         verbose_name = 'Food Critic Review'
         verbose_name_plural = 'Food Critic Reviews'
         unique_together = ['reviewer_name', 'restaurant']
 
 
-class MenuReview(models.Model):
+class MenuReview(ReviewMixin):
     reviewer_name = models.CharField(
         max_length=100,
     )
@@ -116,19 +127,20 @@ class MenuReview(models.Model):
         on_delete=models.CASCADE,
     )
 
-    review_content = models.TextField()
+    # review_content = models.TextField()
+    #
+    # rating = models.PositiveIntegerField(
+    #     validators=[
+    #         MaxValueValidator(5)
+    #     ]
+    # )
 
-    rating = models.PositiveIntegerField(
-        validators=[
-            MaxValueValidator(5)
-        ]
-    )
-
-    class Meta:
-        ordering = ['-rating']
+    class Meta(ReviewMixin.Meta):
         verbose_name = 'Menu Review'
         verbose_name_plural = 'Menu Reviews'
         unique_together = ('reviewer_name', 'menu')
         indexes = [
             Index(fields=['menu',], name='main_app_menu_review_menu_id')
         ]
+
+
