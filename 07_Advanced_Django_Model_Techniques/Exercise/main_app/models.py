@@ -1,8 +1,17 @@
+from decimal import Decimal
+
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator, URLValidator, MinLengthValidator
 from django.db import models as m
 
 md = m.Model
+
+
+# Mixins
+class RechargeEnergyMixin:
+    def recharge_energy(self, amount: int) -> None:
+        self.energy = min(100, self.energy + amount)
+        self.save()
 
 
 # Custom Validators
@@ -116,3 +125,79 @@ class Music(BaseMedia):
         ]
     )
 
+
+### TAX-INDUCING PRICING ###
+class Product(md):
+    name = m.CharField(
+        max_length=100,
+    )
+
+    price = m.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+    )
+
+    def calculate_tax(self) -> Decimal:
+        return self.price * Decimal(0.08)
+
+    @staticmethod
+    def calculate_shipping_cost(weight: Decimal) -> Decimal:
+        return Decimal(weight * 2)
+
+    def format_product_name(self) -> str:
+        return f'Product: {self.name}'
+
+
+class DiscountedProduct(Product):
+    class Meta:
+        proxy = True
+
+    def calculate_price_without_discount(self) -> Decimal:
+        return self.price * Decimal(1.20)
+
+    def calculate_tax(self) -> Decimal:
+        return self.price * Decimal(0.05)
+
+    @staticmethod
+    def calculate_shipping_cost(weight: Decimal) -> Decimal:
+        return weight * Decimal(1.50)
+
+    def format_product_name(self):
+        return f'Discounted Product: {self.name}'
+
+
+### SUPERHERO UNIVERSE ###
+class Hero(md, RechargeEnergyMixin):
+    name = m.CharField(
+        max_length=100,
+    )
+    hero_title = m.CharField(
+        max_length=100,
+    )
+    energy = m.PositiveIntegerField()
+
+
+class SpiderHero(Hero):
+    class Meta:
+        proxy = True
+
+    def swing_from_buildings(self) -> str:
+        if self.energy - 80 >= 0:
+            self.energy -= 80 if self.energy - 80 > 0 else 79  # max(1, self.energy - 80)
+            self.save()
+            return f"{self.name} as Spider Hero swings from buildings using web shooters"
+
+        return f"{self.name} as Spider Hero is out of web shooter fluid"
+
+
+class FlashHero(Hero):
+    class Meta:
+        proxy = True
+
+    def run_at_super_speed(self) -> str:
+        if self.energy - 65 >= 0:
+            self.energy -= 65 if self.energy - 65 > 0 else 64
+            self.save()
+            return f"{self.name} as Flash Hero runs at lightning speed, saving the day"
+
+        return f"{self.name} as Flash Hero needs to recharge the speed force"
