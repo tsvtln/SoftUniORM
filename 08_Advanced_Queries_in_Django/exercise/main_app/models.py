@@ -1,5 +1,7 @@
+from datetime import timedelta
+
 from django.db import models
-from django.db.models import QuerySet
+from django.db.models import QuerySet, F, Q
 
 from main_app.validators import RangeValueValidator
 from orm_skeleton.managers import RealEstateListingManager, VideoGameManager
@@ -73,6 +75,13 @@ class Invoice(models.Model):
     def get_invoice_with_billing_info(cls, invoice_number: str):
         return cls.objects.get(invoice_number=invoice_number)
 
+    @classmethod
+    def recent_completed_tasks(cls, days: int):
+        return cls.objects.filter(
+            is_completed=True,
+            completion_date__gte=F('creation_date') - time_delta(days=days)
+        )
+
 
 class Technology(models.Model):
     name = models.CharField(max_length=100)
@@ -109,6 +118,34 @@ class Task(models.Model):
     is_completed = models.BooleanField(default=False)
     creation_date = models.DateField()
     completion_date = models.DateField()
+
+    @classmethod
+    def ongoing_high_priority_tasks(cls):
+        return cls.objects.filter(
+            priority='High',
+            is_completed=False,
+            completion_date__gt=F('creation_date')
+        )
+
+    @classmethod
+    def completed_mid_priority_tasks(cls):
+        return cls.objects.filter(
+            priority='Medium',
+            is_completed=True
+        )
+
+    @classmethod
+    def search_tasks(cls, query: str):
+        return cls.objects.filter(
+            Q(title__icontains=query) | Q(description__icontains=query)
+        )
+
+    @classmethod
+    def recent_completed_tasks(cls, days: int) -> QuerySet:
+        return cls.objects.filter(
+            is_completed=True,
+            completion_date__gte=F('creation_date') - timedelta(days=days)
+        )
 
 
 class Exercise(models.Model):
