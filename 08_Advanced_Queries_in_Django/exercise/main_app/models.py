@@ -84,10 +84,16 @@ class Project(models.Model):
     description = models.TextField()
     technologies_used = models.ManyToManyField(Technology, related_name='projects')
 
+    def get_programmers_with_technologies(self) -> QuerySet:
+        return self.programmers.prefetch_related('projects__technologies_used')
+
 
 class Programmer(models.Model):
     name = models.CharField(max_length=100)
     projects = models.ManyToManyField(Project, related_name='programmers')
+
+    def get_projects_with_technologies(self):
+        return self.projects.prefetch_related('technologies_used')
 
 
 class Task(models.Model):
