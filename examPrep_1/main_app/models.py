@@ -1,6 +1,8 @@
 from django.core.validators import MinLengthValidator, MinValueValidator
 from django.db import models
 
+from main_app.model_managers import DirectorManager
+
 
 # Create your models here.
 class Director(models.Model):
@@ -26,6 +28,8 @@ class Director(models.Model):
         ],
         default=0,
     )
+
+    objects = DirectorManager()
 
 
 class Actor(models.Model):
