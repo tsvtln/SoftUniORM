@@ -1,3 +1,7 @@
+# usage example
+# from dummy_data import populate_model_with_data
+# populate_model_with_data(Registration, 20)
+
 import random
 from _decimal import Decimal
 
