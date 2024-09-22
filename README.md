@@ -79,10 +79,11 @@ LOGGING = {
         },
     },
 }
+```
 
-Database Configuration
+### Database Configuration
 
-python
+```python
 
 DATABASES = {
     "default": {
@@ -94,147 +95,158 @@ DATABASES = {
         "PORT": "5432",
     }
 }
+```
+## Model Field Attributes
 
-Model Field Attributes
-auto_now_add
+### auto_now_add
 
     Description: Automatically sets the field to now when the object is first created.
     Behavior:
         When a new record (object) is created, the field is set to the current time of creation.
         Subsequent updates to the object won't change this field; it remains set to the initial creation time.
 
-python
+```python
 
 auto_now_add=True
+```
 
-auto_now
+### auto_now
 
     Description: Automatically sets the field to now every time the object is saved.
     Behavior:
         When an object is created, the field is set to the current time.
         Every time the object is updated and saved, the field is updated to the current time.
 
-python
+```python
 
 auto_now=True
-
-Optional Fields
+```
+### Optional Fields
 
     Parameters:
         null=True: Allows the database to store NULL for this field.
         blank=True: Allows the field to be blank in forms.
 
-python
+```python
 
 null=True
 blank=True
+```
+## Migrations
+### Creating an Empty Migration
 
-Migrations
-Creating an Empty Migration
+#### To create an empty migration for custom operations:
 
-To create an empty migration for custom operations:
-
-bash
+``` bash
 
 python manage.py makemigrations main_app --name migrate_unique_brands --empty
+```
 
-QuerySet Operations
-Remove Nested from QuerySet
+## QuerySet Operations
+### Remove Nested from QuerySet
 
-Retrieve a flat list of brand names without nesting:
+#### Retrieve a flat list of brand names without nesting:
 
-python
+```python
 
 print(Shoe.objects.values_list('brand', flat=True))
+```
 
-Get Unique Values
+## Get Unique Values
 
-Retrieve a flat list of unique brand names:
+#### Retrieve a flat list of unique brand names:
 
-python
+```python
 
 print(Shoe.objects.values_list('brand', flat=True).distinct())
+```
+## Model Management
+### Get the Model
 
-Model Management
-Get the Model
+#### Importing the Model:
 
-Importing the Model:
-
-python
+```python
 
 from main_app.models import Shoe  # Not recommended in migration files
+```
 
-Using apps.get_model in Migrations:
+### Using apps.get_model in Migrations:
 
-python
+```python
 
 shoe = apps.get_model('main_app', 'Shoe')
+```
 
-Generate Inserts
+### Generate Inserts
 
-Using create:
+#### Using create:
 
-python
+```python
 
 for brand_name in ubn:
     unique_brands.create(brand_name=brand_name)  # Inserts one by one
+```
 
-Using bulk_create (More Optimal):
+### Using bulk_create (More Optimal):
 
-python
+```python
 
 unique_brands.objects.bulk_create([
     unique_brands(brand_name=brand_name) for brand_name in ubn
 ])
+```
 
-Get Class Name
+## Get Class Name
 
-Retrieve the class name of a model:
+### Retrieve the class name of a model:
 
-python
+```python
 
 Shoe.__name__
+```
 
-Django Admin Customization
-Display Fields
+## Django Admin Customization
+### Display Fields
 
-Specify fields to display in the admin list view:
+#### Specify fields to display in the admin list view:
 
-python
+```python
 
 list_display = (
     'event_name',
     'participant_name',
     'registration_date'
 )
+```
 
-Filters
+## Filters
+### Add filters to the admin sidebar:
 
-Add filters to the admin sidebar:
-
-python
+```python
 
 list_filter = (
     'event_name',
     'registration_date'
 )
+```
 
-Search Fields
+### Search Fields
 
-Enable search functionality in the admin:
+#### Enable search functionality in the admin:
 
-python
+```python
 
 search_fields = (
     'event_name',
     'registration_date'
 )
+```
 
-Organize Fields
+### Organize Fields
 
-Group fields into sections:
+#### Group fields into sections:
 
-python
+```python
 
 fieldsets = (
     ('Personal Information', {
@@ -244,34 +256,29 @@ fieldsets = (
         'fields': ('grade',)
     }),
 )
+```
+#### Template Example:
 
-Template Example:
-
-python
+```python
 
 fieldsets = (({}), ({}))
+```
+## Database Operations
+### Creating Objects
 
-Database Operations
-Creating Objects
+#### Delete all employee records:
 
-(Provide specific examples as needed)
-Updating Objects
-
-(Provide specific examples as needed)
-Deleting Objects
-
-Delete all employee records:
-
-python
+```python
 
 employees = Employee.objects.all()
 employees.delete()
+```
 
-Choices and Enumerations
+### Choices and Enumerations
 
-Example Model with Choices:
+#### Example Model with Choices:
 
-python
+```python
 
 from django.db import models
 
@@ -286,15 +293,16 @@ class Department(models.Model):
         max_length=20,
         choices=Locations.choices
     )
+```
 
-Bulk Operations
-Bulk Update
+## Bulk Operations
+### Bulk Update
 
 Instead of saving each instance individually, use bulk_update for better performance.
 
-Example Function:
+#### Example Function:
 
-python
+```python
 
 from django.db.models import F
 
@@ -312,38 +320,42 @@ def increase_room_capacity() -> None:
 
         previous_room_capacity = room.capacity
     HotelRoom.objects.bulk_update(all_rooms, ['capacity'])
+```
 
-Bulk Creating Objects
+### Bulk Creating Objects
 
-Example Function:
+#### Example Function:
 
-python
+```python
 
 def bulk_create_arts(first_art: ArtworkGallery, second_art: ArtworkGallery) -> None:
     ArtworkGallery.objects.bulk_create([
         first_art,
         second_art,
     ])
+```
 
-Filtering and Excluding Data
-Filtering Data
+## Filtering and Excluding Data
+### Filtering Data
 
-Retrieve books based on genre and language:
+#### Retrieve books based on genre and language:
 
-python
+```python
 
 books = Book.objects.filter(genre=genre, language=language)
+```
 
-Excluding Data
+### Excluding Data
 
-Exclude authors with no nationality:
+#### Exclude authors with no nationality:
 
-python
+```python
 
 authors = Author.objects.exclude(nationality=None)
+```
 
-Advanced Querying
-Q Objects
+## Advanced Querying
+### Q Objects
 
 Use Q objects for complex lookups with AND, OR, NOT, XOR operations.
 
@@ -354,9 +366,9 @@ Operators:
     NOT: ~
     XOR: ^
 
-Example:
+#### Example:
 
-python
+```python
 
 from django.db.models import Q
 
@@ -366,32 +378,34 @@ products = Product.objects.filter(
     '-price',
     'name'
 )
+```
 
-Search Example:
+#### Search Example:
 
-python
+```python
 
 @classmethod
 def search_tasks(cls, query: str):
     return cls.objects.filter(
         Q(title__icontains=query) | Q(description__icontains=query) 
     )
+```
 
-F Objects
+## F Objects
 
 Use F objects to refer to model fields directly in queries.
 
-Example:
+#### Example:
 
-python
+```python
 
 from django.db.models import F
 
 product_to_be_discounted.update(price=F('price') * 0.7)
+```
+#### Another Example:
 
-Another Example:
-
-python
+```python
 
 @classmethod
 def ongoing_high_priority_task(cls):
@@ -400,72 +414,77 @@ def ongoing_high_priority_task(cls):
         is_completed=False,
         completion_date__gt=F('creation_date')
     )
+```
 
-Annotate
+## Annotate
 
 Add aggregate values to each item in the QuerySet.
 
-Example:
+#### Example:
 
-python
+```python
 
 from django.db.models import Sum, Count, Max
 
 orders = Product.objects.annotate(
     total=Sum('orderproduct__quantity')
 ).values('name', 'total').order_by('-total')
+```
+#### Popular Locations Example:
 
-Popular Locations Example:
-
-python
+```python
 
 def popular_locations(self) -> QuerySet:
     return self.values('location').annotate(
         location_count=Count('location')
     ).order_by('-location_count', 'location')[:2]
+```
 
-Highest Rated Game Example:
+#### Highest Rated Game Example:
 
-python
+```python
 
 def highest_rated_game(self) -> QuerySet:
     return self.annotate(
         max_rating=Max('rating')
     ).order_by('-max_rating').first()
+```
 
-Prefetch Related
+## Prefetch Related
 
-Optimize queries involving related objects.
+### Optimize queries involving related objects.
 
-Example:
+#### Example:
 
-python
+```python
 
 orders = Order.objects.prefetch_related('orderproduct_set__product__category').order_by('id')
+```
+#### Another Example:
 
-Another Example:
-
-python
+```python
 
 def get_programmers_with_technologies(self) -> QuerySet:
     return self.programmers.prefetch_related('projects__technologies_used')
+```
 
-Raw Queries
+## Raw Queries
 
-Execute raw SQL queries.
+### Execute raw SQL queries.
 
-Example:
+#### Example:
 
-python
+```python
 
 employees = Employee.objects.raw('SELECT * FROM users_employee')
+```
 
-Model Relations
-ForeignKey (Many-to-One)
+## Model Relations
+### ForeignKey (Many-to-One)
 
-Example:
+#### Example:
 
-python
+```python
 
 class Department(models.Model):
     # Department fields...
@@ -477,10 +496,10 @@ class Employee(models.Model):
         on_delete=models.CASCADE, 
         related_name='employees'
     )
+```
+## On Delete Options:
 
-On Delete Options:
-
-python
+```python
 
 class Employee(models.Model):
     # Employee fields...
@@ -494,12 +513,13 @@ class Employee(models.Model):
         to=Department,
         on_delete=models.RESTRICT
     )
+```
 
-ManyToManyField
+## ManyToManyField
 
-Example with Through Model:
+#### Example with Through Model:
 
-python
+```python
 
 class StudentEnrollment(models.Model):
     student = models.ForeignKey(
@@ -511,10 +531,10 @@ class StudentEnrollment(models.Model):
         on_delete=models.CASCADE
     )
     enrollment_date = models.DateField()
+```
+#### Another Example:
 
-Another Example:
-
-python
+```python
 
 class Employee(models.Model):
     # Employee fields...
@@ -537,12 +557,12 @@ class ProjectAssignment(models.Model):
     )
     start_date = models.DateField()
     role = models.CharField(max_length=30)
+```
+## OneToOneField
 
-OneToOneField
+#### Example:
 
-Example:
-
-python
+```python
 
 class LecturerProfile(models.Model):
     lecturer = models.OneToOneField(
@@ -550,41 +570,44 @@ class LecturerProfile(models.Model):
         on_delete=models.CASCADE
     )
     # Additional fields...
+```
 
-Model Meta Options
-Abstract Models
+## Model Meta Options
+### Abstract Models
 
 Abstract models are not created as database tables and are used as base classes.
 
-python
+```python
 
 class Meta:
     abstract = True
+```
 
-Proxy Models
+## Proxy Models
 
 Proxy models share the same database table as their parent model but can have different behavior.
 
-python
+```python
 
 class Meta:
     proxy = True
+```
 
-Ordering and Indexing
+## Ordering and Indexing
+### Ordering:
 
-Ordering:
-
-python
+```python
 
 class Meta:
     ordering = ['-rating']
     verbose_name = 'Restaurant Review'
     verbose_name_plural = 'Restaurant Reviews'
     unique_together = ['reviewer_name', 'restaurant']
+```
 
-Indexing:
+### Indexing:
 
-python
+```python
 
 from django.db import models
 
@@ -595,10 +618,10 @@ class Meta:
 
 Custom Fields and Validators
 Custom Fields
+```
+#### BooleanChoiceField Example:
 
-BooleanChoiceField Example:
-
-python
+```python
 
 from django.db import models
 
@@ -607,10 +630,11 @@ class BooleanChoiceField(models.BooleanField):
         kwargs['choices'] = ((True, 'Available'), (False, 'Not Available'))
         kwargs['default'] = True
         super().__init__(*args, **kwargs)
+```
 
-StudentIDField Example:
+#### StudentIDField Example:
 
-python
+```python
 
 from django.db import models
 from django.core.exceptions import ValidationError
@@ -628,12 +652,13 @@ class StudentIDField(models.PositiveIntegerField):
         if clean_value <= 0:
             raise ValidationError('ID cannot be less than or equal to zero')
         return clean_value
+```
 
-Validators
+## Validators
 
-Example with CharField:
+#### Example with CharField:
 
-python
+```python
 
 from django.db import models
 from django.core.validators import MinLengthValidator, MaxLengthValidator
@@ -646,8 +671,9 @@ class Restaurant(models.Model):
             MaxLengthValidator(100, message='Name cannot exceed 100 characters.')
         ]
     )
+```
 
-Common Validators:
+### Common Validators:
 
     MinValueValidator
     MaxValueValidator
@@ -662,9 +688,9 @@ Common Validators:
     DecimalValidator
     FileExtensionValidator
 
-Email Field Example:
+#### Email Field Example:
 
-python
+```python
 
 from django.db import models
 
@@ -673,10 +699,11 @@ email = models.EmailField(
         'invalid': 'Enter a valid email address'
     }
 )
+```
 
-Custom Validator Example:
+#### Custom Validator Example:
 
-python
+```python
 
 from django.core.exceptions import ValidationError
 
@@ -688,10 +715,11 @@ def validate_menu_categories(value):
         raise ValidationError(
             'The menu must include each of the categories "Appetizers", "Main Course", "Desserts".'
         )
+```
 
-Validator Class Example:
+#### Validator Class Example:
 
-python
+```python
 
 from django.core.exceptions import ValidationError
 
@@ -714,13 +742,14 @@ class RangeValueValidator:
             [self.min_value, self.max_value],
             {'message': self.message}
         )
+```
 
-Managers and Query Optimization
-Custom Managers
+## Managers and Query Optimization
+### Custom Managers
 
-Example Manager:
+#### Example Manager:
 
-python
+```python
 
 from django.db import models
 
@@ -730,21 +759,23 @@ class ProductManager(models.Manager):
     
     def available_products_in_category(self, category_name: str):
         return self.filter(category__name=category_name, is_available=True)
+```
 
-Assigning the Manager to a Model:
+### Assigning the Manager to a Model:
 
-python
+```python
 
 class Product(models.Model):
     # Product fields...
     
     objects = ProductManager()
+```
 
-Mixins
+### Mixins
 
-Example Mixin:
+#### Example Mixin:
 
-python
+```python
 
 class RechargeEnergyMixin:
     def recharge_energy(self, amount: int) -> None:
@@ -755,20 +786,22 @@ class Hero(models.Model, RechargeEnergyMixin):
     name = models.CharField(max_length=100)
     hero_title = models.CharField(max_length=100)
     energy = models.PositiveIntegerField()
+```
 
-Data Validation and Saving
-Saving an Instance to the Database
+## Data Validation and Saving
+### Saving an Instance to the Database
 
-python
+```python
 
 def save(self, *args, **kwargs):
     super().save(*args, **kwargs)
+```
 
-Data Validation Before Saving
+## Data Validation Before Saving
 
-Using clean and full_clean:
+### Using clean and full_clean:
 
-python
+```python
 
 from django.core.exceptions import ValidationError
 
@@ -779,30 +812,33 @@ def clean(self):
 def save(self, *args, **kwargs):
     self.full_clean()
     super().save(*args, **kwargs)
+```
 
-Creating and Managing Objects in the Database
-Adding an Object to a Many-to-Many Relationship
+## Creating and Managing Objects in the Database
+### Adding an Object to a Many-to-Many Relationship
 
-python
+```python
 
 def add_song_to_artist(artist_name: str, song_title: str):
     artist_object = Artist.objects.get(name=artist_name)
     song_object = Song.objects.get(title=song_title)
     artist_object.songs.add(song_object)
+```
 
-Removing an Object from a Many-to-Many Relationship
+### Removing an Object from a Many-to-Many Relationship
 
-python
+```python
 
 def remove_song_from_artist(artist_name: str, song_title: str):
     artist_object = Artist.objects.get(name=artist_name)
     song_object = Song.objects.get(title=song_title)
     artist_object.songs.remove(song_object)
+```
 
-Example Functions
+#### Example Functions
 Calculate Average Rating for a Product
 
-python
+```python
 
 def calculate_average_rating_for_product_by_name(product_name: str):
     product_object = Product.objects.get(name=product_name)
@@ -811,13 +847,15 @@ def calculate_average_rating_for_product_by_name(product_name: str):
     avg_rating = total_rating / len(reviews_for_product)
 
     return avg_rating
+```
 
 Get All Products with No Reviews
 
-python
+```python
 
 def get_products_with_no_reviews():
     return Product.objects.filter(reviews__isnull=True).order_by('-name')
+```
 
 Additional Tips
 
