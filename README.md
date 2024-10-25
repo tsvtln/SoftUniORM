@@ -51,7 +51,7 @@
   - [Custom Managers](#custom-managers)
 - [Mixins](#mixins)
 - [Data Validation and Saving](#data-validation-and-saving)
-
+- [Creating and Managing Objects in the Database](#creating-and-managing-objects-in-the-database)
 ---
 
 ## Settings and Configurations
